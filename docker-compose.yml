@@ -1,0 +1,39 @@
+services:
+  db:
+    image: postgres:17
+    container_name: piazdagh_db
+    environment:
+      POSTGRES_DB: piazdagh
+      POSTGRES_USER: piazdagh_user
+      POSTGRES_PASSWORD: piazdagh_pass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./backend
+    container_name: piazdagh_backend
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    container_name: piazdagh_frontend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
