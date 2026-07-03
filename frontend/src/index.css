@@ -1,111 +1,315 @@
+/* ============================================
+   Bootstrap Color Override System
+   Based on PiazDagh Design Palette
+   ============================================ */
+
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  --bs-primary: #50ad95;
+  --bs-primary-rgb: 80, 173, 149;
+  --bs-secondary: #9c717a;
+  --bs-secondary-rgb: 156, 113, 122;
+  --bs-success: #50ad95;
+  --bs-success-rgb: 80, 173, 149;
+  --bs-warning: #e88427;
+  --bs-warning-rgb: 232, 132, 39;
+  --bs-danger: #9c717a;
+  --bs-danger-rgb: 156, 113, 122;
+  --bs-info: #50ad95;
+  --bs-info-rgb: 80, 173, 149;
+  --bs-light: #e6ebe3;
+  --bs-light-rgb: 230, 235, 227;
+  --bs-dark: #444544;
+  --bs-dark-rgb: 68, 69, 68;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  /* Body & Background */
+  --bs-body-bg: #e6ebe3;
+  --bs-body-color: #444544;
+  --bs-body-font-family: 'Vazirmatn', system-ui, -apple-system, sans-serif;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Links */
+  --bs-link-color: #e88427;
+  --bs-link-hover-color: #9c717a;
+  --bs-link-decoration: none;
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+  /* Borders */
+  --bs-border-color: #444544;
+  --bs-border-width: 2px;
+  --bs-border-radius: 0.5rem;
+
+  /* Headings */
+  --bs-heading-color: #444544;
+  --bs-heading-font-weight: 800;
+
+  /* Navbar */
+  --bs-navbar-bg: #50ad95;
+  --bs-navbar-color: #e6ebe3;
+  --bs-navbar-hover-color: #444544;
+  --bs-navbar-active-color: #e88427;
+  --bs-navbar-brand-color: #444544;
+  --bs-navbar-brand-hover-color: #e88427;
+
+  /* Buttons - Primary (Mint) */
+  --bs-btn-primary-bg: #50ad95;
+  --bs-btn-primary-border: #50ad95;
+  --bs-btn-primary-color: #e6ebe3;
+  --bs-btn-primary-hover-bg: #9c717a;
+  --bs-btn-primary-hover-border: #9c717a;
+  --bs-btn-primary-hover-color: #e6ebe3;
+  --bs-btn-primary-active-bg: #444544;
+  --bs-btn-primary-active-border: #444544;
+  --bs-btn-primary-active-color: #e6ebe3;
+
+  /* Buttons - Warning/CTA (Saffron Orange) */
+  --bs-btn-warning-bg: #e88427;
+  --bs-btn-warning-border: #e88427;
+  --bs-btn-warning-color: #ffffff;
+  --bs-btn-warning-hover-bg: #9c717a;
+  --bs-btn-warning-hover-border: #9c717a;
+  --bs-btn-warning-hover-color: #ffffff;
+  --bs-btn-warning-active-bg: #444544;
+  --bs-btn-warning-active-border: #444544;
+  --bs-btn-warning-active-color: #e6ebe3;
+
+  /* Buttons - Outline Variants */
+  --bs-btn-outline-primary-color: #50ad95;
+  --bs-btn-outline-primary-border: #50ad95;
+  --bs-btn-outline-primary-hover-bg: #50ad95;
+  --bs-btn-outline-primary-hover-color: #e6ebe3;
+
+  /* Cards */
+  --bs-card-bg: #e6ebe3;
+  --bs-card-border-color: #444544;
+  --bs-card-border-width: 1px;
+  --bs-card-cap-bg: #50ad95;
+  --bs-card-cap-color: #e6ebe3;
+
+  /* Badges */
+  --bs-badge-bg: #9c717a;
+  --bs-badge-color: #e6ebe3;
+
+  /* Forms */
+  --bs-input-bg: #ffffff;
+  --bs-input-border-color: #444544;
+  --bs-input-focus-border-color: #e88427;
+  --bs-input-focus-box-shadow: 0 0 0 0.25rem rgba(232, 132, 39, 0.25);
+  --bs-input-color: #444544;
+  --bs-input-placeholder-color: #757575; 
+
+  /* Dropdowns */
+  --bs-dropdown-bg: #e6ebe3;
+  --bs-dropdown-border-color: #444544;
+  --bs-dropdown-link-color: #444544;
+  --bs-dropdown-link-hover-bg: #50ad95;
+  --bs-dropdown-link-hover-color: #e6ebe3;
+  --bs-dropdown-link-active-bg: #e88427;
+  --bs-dropdown-link-active-color: #e6ebe3;
+
+  /* Modals */
+  --bs-modal-bg: #e6ebe3;
+  --bs-modal-header-bg: #50ad95;
+  --bs-modal-header-color: #e6ebe3;
+  --bs-modal-header-border-color: #444544;
+
+  /* Tooltips */
+  --bs-tooltip-bg: #444544;
+  --bs-tooltip-color: #e6ebe3;
+
+  /* Pagination */
+  --bs-pagination-bg: #e6ebe3;
+  --bs-pagination-border-color: #444544;
+  --bs-pagination-color: #444544;
+  --bs-pagination-hover-bg: #50ad95;
+  --bs-pagination-hover-color: #e6ebe3;
+  --bs-pagination-active-bg: #e88427;
+  --bs-pagination-active-border-color: #e88427;
+  --bs-pagination-active-color: #e6ebe3;
+  --bs-pagination-disabled-bg: #e6ebe3;
+  --bs-pagination-disabled-color: #9c717a;
+
+  /* Progress Bars */
+  --bs-progress-bg: #e6ebe3;
+  --bs-progress-bar-bg: #e88427;
+  --bs-progress-border-radius: 0.5rem;
+
+  /* List Groups */
+  --bs-list-group-bg: #e6ebe3;
+  --bs-list-group-border-color: #444544;
+  --bs-list-group-color: #444544;
+  --bs-list-group-hover-bg: #50ad95;
+  --bs-list-group-hover-color: #e6ebe3;
+  --bs-list-group-active-bg: #e88427;
+  --bs-list-group-active-border-color: #e88427;
+  --bs-list-group-active-color: #e6ebe3;
+
+  /* Alerts */
+  --bs-alert-bg: #e6ebe3;
+  --bs-alert-border-color: #444544;
+  --bs-alert-color: #444544;
+
+  /* Tables */
+  --bs-table-bg: #e6ebe3;
+  --bs-table-color: #444544;
+  --bs-table-border-color: #444544;
+  --bs-table-striped-bg: rgba(80, 173, 149, 0.05);
+  --bs-table-hover-bg: rgba(232, 132, 39, 0.1);
+  --bs-table-head-bg: #50ad95;
+  --bs-table-head-color: #e6ebe3;
+
+  /* Accordion */
+  --bs-accordion-bg: #e6ebe3;
+  --bs-accordion-border-color: #444544;
+  --bs-accordion-btn-bg: #e6ebe3;
+  --bs-accordion-btn-color: #444544;
+  --bs-accordion-btn-active-bg: #50ad95;
+  --bs-accordion-btn-active-color: #e6ebe3;
+  --bs-accordion-active-bg: #e6ebe3;
+  --bs-accordion-active-color: #444544;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
+/* ============================================
+   Custom Utility Classes
+   ============================================ */
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+/* Gradient variations using palette */
+.bg-gradient-mint {
+  background: linear-gradient(135deg, #50ad95, #444544);
 }
 
-body {
-  margin: 0;
+.bg-gradient-saffron {
+  background: linear-gradient(135deg, #e88427, #9c717a);
 }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+.bg-gradient-neutral {
+  background: linear-gradient(135deg, #e6ebe3, #50ad95);
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
+/* Text color utilities */
+.text-mint { color: #50ad95; }
+.text-saffron { color: #e88427; }
+.text-plum { color: #9c717a; }
+.text-charcoal { color: #444544; }
+.text-canvas { color: #e6ebe3; }
+
+/* Background color utilities */
+.bg-mint { background-color: #50ad95; }
+.bg-saffron { background-color: #e88427; }
+.bg-plum { background-color: #9c717a; }
+.bg-charcoal { background-color: #444544; }
+.bg-canvas { background-color: #e6ebe3; }
+
+/* Border color utilities */
+.border-mint { border-color: #50ad95; }
+.border-saffron { border-color: #e88427; }
+.border-plum { border-color: #9c717a; }
+.border-charcoal { border-color: #444544; }
+
+/* Custom button variants */
+.btn-saffron {
+  background-color: #e88427;
+  border-color: #e88427;
+  color: #ffffff;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+.btn-saffron:hover {
+  background-color: #9c717a;
+  border-color: #9c717a;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(156, 113, 122, 0.3);
+}
+
+.btn-outline-saffron {
+  background-color: transparent;
+  border: 2px solid #e88427;
+  color: #e88427;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+.btn-outline-saffron:hover {
+  background-color: #e88427;
+  border-color: #e88427;
+  color: #ffffff;
+}
+
+/* Native RTL Override Layer Compatibility */
+[dir="rtl"] .dropdown-menu {
+  text-align: right;
+}
+
+[dir="rtl"] .navbar-nav {
+  padding-right: 0;
+}
+
+/* Recipe-specific card styling */
+.recipe-card {
+  background-color: #e6ebe3;
+  border: 1px solid #444544;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.recipe-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(68, 69, 68, 0.15);
+  border-color: #e88427;
+}
+
+.recipe-card .card-body {
+  background-color: #e6ebe3;
+}
+
+/* Star rating system */
+.star-rating {
+  color: #e88427;
+  font-size: 1.2rem;
+}
+.star-rating .empty {
+  color: transparent; 
+  -webkit-text-stroke: 1px #e88427;
+}
+
+/* Print recipe button specific styling */
+.btn-print-recipe {
+  background-color: #e88427;
+  border: 2px solid #e88427;
+  color: #ffffff;
+  font-weight: 800;
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+}
+.btn-print-recipe:hover {
+  background-color: #9c717a;
+  border-color: #9c717a;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(156, 113, 122, 0.3);
+}
+
+/* Recipe metadata tags */
+.recipe-tag {
+  background-color: #9c717a;
+  color: #e6ebe3;
+  padding: 0.35rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.875rem;
   font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
-}
-
-code,
-.counter {
-  font-family: var(--mono);
   display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+  align-items: center;
+  gap: 0.5rem;
+}
+.recipe-tag .tag-icon {
+  color: #e88427;
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+/* Recipe metric numbers */
+.recipe-metric {
+  color: #e88427;
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+.recipe-metric.plum {
+  color: #9c717a;
 }
