@@ -28,7 +28,7 @@
 
   /* Links */
   --bs-link-color: #e88427;
-  --bs-link-hover-color: #9c717a;
+  --bs-navbar-hover-color: #50ad95;
   --bs-link-decoration: none;
 
   /* Borders */
@@ -198,7 +198,7 @@
 .bg-canvas { background-color: #e6ebe3; }
 
 /* Border color utilities */
-.border-mint { border-color: #50ad95; }
+.border-mint { border-color: #7ddfc6; }
 .border-saffron { border-color: #e88427; }
 .border-plum { border-color: #9c717a; }
 .border-charcoal { border-color: #444544; }
