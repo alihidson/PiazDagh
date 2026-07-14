@@ -174,14 +174,22 @@
 .bg-gradient-mint {
   background: linear-gradient(135deg, #50ad95, #444544);
 }
+.bg-mint-subtle {
+  background-color: rgba(80, 173, 149, 0.15);
+}
 
 .bg-gradient-saffron {
-  background: linear-gradient(135deg, #e88427, #9c717a);
+  background: linear-gradient(135deg, #e6ebe3, #e88427);
 }
 
 .bg-gradient-neutral {
   background: linear-gradient(135deg, #e6ebe3, #50ad95);
 }
+
+.bg-gradient-plum {
+  background: linear-gradient(135deg, #e6ebe3, #9c717a);
+}
+
 
 /* Text color utilities */
 .text-mint { color: #50ad95; }

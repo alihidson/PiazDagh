@@ -11,7 +11,7 @@ const RecipeCard = ({
   linkTo,
 }) => {
   return (
-    <div className="card recipe-card bg-canvas h-100 border-0" style={{ maxWidth: '18rem' }}>
+    <div className="card recipe-card bg-canvas h-100 border-0">
       
       {/* Mint accent bar */}
       <div className="bg-mint" style={{ height: '4px' }}></div>
