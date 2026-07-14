@@ -1,0 +1,7 @@
+.recipe-card {
+  background-color: #e6ebe3;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}

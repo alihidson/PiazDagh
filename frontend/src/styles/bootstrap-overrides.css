@@ -198,10 +198,10 @@
 .bg-canvas { background-color: #e6ebe3; }
 
 /* Border color utilities */
-.border-mint { border-color: #7ddfc6; }
+.border-mint { border-color: #7ddfc6 !important;} 
 .border-saffron { border-color: #e88427; }
 .border-plum { border-color: #9c717a; }
-.border-charcoal { border-color: #444544; }
+.border-charcoal { border-color: #444544 !important; }
 
 /* Custom button variants */
 .btn-saffron {
@@ -312,4 +312,14 @@
 }
 .recipe-metric.plum {
   color: #9c717a;
+}
+
+/* Truncate card description to 2 lines */
+.recipe-card .card-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
