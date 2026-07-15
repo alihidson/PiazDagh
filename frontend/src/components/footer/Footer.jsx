@@ -2,6 +2,7 @@ import BrandColumn from './BrandColumn';
 import LinkColumn from './LinkColumn';
 import CopyrightBar from './CopyrightBar';
 import { footerColumns } from './footerData';
+import ScrollToTopButton from './ScrollToTopButton';
 import './Footer.css';
 
 const Footer = () => {
@@ -37,6 +38,20 @@ const Footer = () => {
 
       {/* ========== PART 2: Copyright Bar ========== */}
       <CopyrightBar />
+
+      {/* Scroll-to-top button */}
+        <div className="position-relative">
+          <div
+            className="position-fixed"
+            style={{
+              bottom: '1.5rem',
+              left: '1.5rem',   // RTL: left means far end (English: right), which is opposite of start
+              zIndex: 1050,
+            }}
+          >
+            <ScrollToTopButton />
+          </div>
+        </div>
     </footer>
   );
 };
