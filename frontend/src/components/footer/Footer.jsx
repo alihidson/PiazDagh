@@ -7,7 +7,7 @@ import './Footer.css';
 
 const Footer = () => {
   return (
-    <footer style={{ borderTopWidth: '3px' }} dir="rtl">
+    <footer className="mt-5" style={{ borderTopWidth: '3px' }} dir="rtl">
       {/* ========== PART 1: Main Footer (Canvas Background) ========== */}
       <div className="bg-canvas pt-5 pb-4">
         <div className="container px-4">

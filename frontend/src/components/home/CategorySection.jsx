@@ -13,7 +13,7 @@ const CategorySection = () => {
       </div>
 
       {/* Grid: 2 on mobile, 4 on desktop */}
-      <div className="row row-cols-2 row-cols-md-4 g-4">
+      <div className="row row-cols-2 row-cols-md-4 g-4 mt-1">
         {categories.map((cat) => (
           <div className="col" key={cat.id}>
             <CategoryCard
