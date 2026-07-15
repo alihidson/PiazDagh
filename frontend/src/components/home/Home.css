@@ -1,0 +1,16 @@
+/* Section heading with Mint underline */
+.section-heading {
+  position: relative;
+  display: inline-block;
+}
+
+.section-heading::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #50ad95;
+  border-radius: 1px;
+}

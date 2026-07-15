@@ -178,6 +178,10 @@
   background-color: rgba(80, 173, 149, 0.15);
 }
 
+.bg-saffron-subtle {
+  background-color: rgba(232, 132, 39, 0.06);
+}
+
 .bg-gradient-saffron {
   background: linear-gradient(135deg, #e6ebe3, #e88427);
 }

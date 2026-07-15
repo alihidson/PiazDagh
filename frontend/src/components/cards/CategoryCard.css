@@ -1,0 +1,60 @@
+/* Category Card */
+.category-card {
+  border: none;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background-color: var(--bs-body-bg, #e6ebe3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+}
+
+.category-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+/* Image zoom */
+.category-card .card-img-top {
+  transition: transform 0.3s ease;
+  object-fit: cover;
+  height: 160px;
+}
+
+.category-card:hover .card-img-top {
+  transform: scale(1.05);
+}
+
+/* Category name */
+.category-card .category-name {
+  color: #444544;
+  transition: color 0.3s ease;
+}
+
+.category-card:hover .category-name {
+  color: #e88427; /* Saffron */
+}
+
+/* Arrow */
+.category-card .category-name::after {
+  content: ' ←'; /* RTL arrow */
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  color: #e88427;
+}
+
+.category-card:hover .category-name::after {
+  opacity: 1;
+}
+
+/* Subtitle */
+.category-card .category-subtitle {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+/* Recipe count */
+.category-card .category-count {
+  color: #9c717a; /* Plum */
+  font-size: 0.8rem;
+}
