@@ -1,0 +1,53 @@
+/* Softer card with thin mint border */
+.auth-card {
+  border: 1px solid rgba(80, 173, 149, 0.25);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+}
+
+/* Branded input – slightly more rounded, better focus (already set globally, but reinforcing) */
+.auth-input {
+  border-radius: 0.6rem;
+  padding: 0.75rem 1rem;
+}
+
+/* Overlay gradient */
+.auth-image-overlay {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent 50%);
+}
+
+/* Premium CTA button – responsive height */
+.btn-auth {
+  height: 44px;
+  font-size: 1rem;
+  border-radius: 0.6rem;
+  box-shadow: 0 4px 12px rgba(232, 132, 39, 0.3);
+  transition: all 0.25s ease;
+}
+
+@media (min-width: 576px) {
+  .btn-auth {
+    height: 50px;
+    font-size: 1.1rem;
+  }
+}
+
+.btn-auth:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(232, 132, 39, 0.4);
+}
+
+/* Forgot password link (muted) */
+.link-muted-hover:hover {
+  color: #50ad95 !important;  /* mint on hover */
+}
+
+/* Register / Login switch link (bold mint → saffron hover) */
+.link-register:hover {
+  color: #e88427 !important;  /* saffron on hover */
+}
+
+/* Floating label RTL alignment for inputs */
+.form-floating > label {
+  right: 0;
+  left: auto;
+}

@@ -1,7 +1,6 @@
 export const topRowLinks = [
   { id: 1, label: 'خبرنامه', href: '/newsletter', variant: 'secondary' },
-  { id: 2, label: 'ورود', href: '/login', variant: 'secondary' },
-  { id: 3, label: 'شروع رایگان', href: '/subscribe', variant: 'saffron' },
+  { id: 3, label: 'شروع رایگان', href: '/auth', variant: 'saffron' },
 ];
 
 export const navLinks = [

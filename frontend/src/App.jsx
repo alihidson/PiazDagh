@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainLayout from './components/layout/MainLayout';
 import Home from './pages/Home';
+import LoginSignupPage from './pages/LoginSignupPage';
 
 
 function App() {
@@ -9,12 +10,10 @@ function App() {
       <div className="app" dir="rtl">
         <Routes>
           {/* Routes WITHOUT Navbar/Footer */}
-          {/* <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} /> */}
-
-          {/* Routes WITH Navbar/Footer */}
+          
+          <Route path="/auth" element={<LoginSignupPage />} />
           <Route element={<MainLayout />}>
-            <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home />} />
             {/* <Route path="/recipes" element={<Recipes />} /> */}
           </Route>
         </Routes>
