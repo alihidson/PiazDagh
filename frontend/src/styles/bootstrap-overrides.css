@@ -32,8 +32,8 @@
   --bs-link-decoration: none;
 
   /* Borders */
-  --bs-border-color: #444544;
-  --bs-border-width: 2px;
+  --bs-border-width: 1px;
+  --bs-border-color: rgba(68, 69, 68, 0.15);
   --bs-border-radius: 0.5rem;
 
   /* Headings */
@@ -194,6 +194,10 @@
   background: linear-gradient(135deg, #e6ebe3, #9c717a);
 }
 
+.bg-plum-subtle {
+  background-color: rgba(156, 113, 122, 0.15);
+}
+
 
 /* Text color utilities */
 .text-mint { color: #50ad95; }
@@ -242,6 +246,29 @@
   background-color: #e88427;
   border-color: #e88427;
   color: #ffffff;
+}
+
+.btn-outline-mint {
+  color: #50ad95;
+  border-color: #50ad95;
+  background-color: transparent;
+}
+
+.btn-outline-mint:hover {
+  color: #e6ebe3;
+  background-color: #50ad95;
+  border-color: #50ad95;
+}
+
+.btn-outline-plum {
+  color: #9c717a;
+  border-color: #9c717a;
+  background-color: transparent;
+}
+.btn-outline-plum:hover {
+  color: #e6ebe3;
+  background-color: #9c717a;
+  border-color: #9c717a;
 }
 
 /* Native RTL Override Layer Compatibility */
@@ -334,4 +361,26 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* Custom Checkbox Styling for Ingredients */
+.ingredients-checkbox .form-check-input {
+  width: 1.2em;
+  height: 1.2em;
+  margin-top: 0.15em;
+  accent-color: #e88427;           /* Saffron */
+  background-color: #e6ebe3;       /* Canvas */
+  border: 1px solid rgba(68, 69, 68, 0.3);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ingredients-checkbox .form-check-input:checked {
+  background-color: #e88427;
+  border-color: #e88427;
+}
+
+.ingredients-checkbox .form-check-input:focus {
+  box-shadow: 0 0 0 0.2rem rgba(232, 132, 39, 0.25);
+  border-color: #e88427;
 }

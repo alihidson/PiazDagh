@@ -3,11 +3,14 @@ import TopRowLink from './TopRowLink';
 import NavItem from './NavItem';
 import SearchBar from './SearchBar';
 import Logo from './Logo';
+import { useAuth } from '../../hooks/useAuth';
+import { Link } from 'react-router-dom';
 import './Navbar.css';
 
 const Navbar = () => {
+  const { isAuthenticated, user, logout } = useAuth();
+
   return (
-    // bg-canvas (Canvas #e6ebe3), border-charcoal
     <nav className="navbar navbar-expand-lg bg-canvas py-0 border-bottom border-mint" dir="rtl">
       <div className="container-fluid d-flex flex-column px-4">
         
@@ -20,9 +23,32 @@ const Navbar = () => {
 
           <div className="d-flex align-items-center">
             <div className="d-none d-lg-flex align-items-center gap-4 small fw-semibold">
+              {/* Always show these links (newsletter, etc.) */}
               {topRowLinks.map((link) => (
                 <TopRowLink key={link.id} label={link.label} href={link.href} variant={link.variant} />
               ))}
+              
+              {/* Auth-aware section */}
+              {isAuthenticated ? (
+                <>
+                  <Link
+                    to="/profile"
+                    className="text-charcoal text-decoration-none d-flex align-items-center gap-1"
+                  >
+                    <span style={{ fontSize: '1.2rem' }}>👤</span>
+                    <span>{user?.username}</span>
+                  </Link>
+                  <button
+                    onClick={logout}
+                    className="btn btn-sm btn-outline-mint px-3 py-1"
+                    style={{ fontSize: '0.8rem' }}
+                  >
+                    خروج
+                  </button>
+                </>
+              ) : (
+                <TopRowLink label="ورود" href="/auth" variant="saffron" />
+              )}
             </div>
 
             <button
@@ -43,10 +69,32 @@ const Navbar = () => {
         <div className="collapse navbar-collapse w-100" id="navbarNav">
           <div className="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center justify-content-lg-between w-100 py-3 py-lg-2">
 
+            {/* Mobile-only duplicate action links */}
             <div className="d-lg-none d-flex flex-column gap-2 mb-3 small fw-semibold">
               {topRowLinks.map((link) => (
                 <TopRowLink key={link.id} label={link.label} href={link.href} variant={link.variant} />
               ))}
+              {/* Mobile auth-aware section */}
+              {isAuthenticated ? (
+                <>
+                  <Link
+                    to="/profile"
+                    className="text-charcoal text-decoration-none d-flex align-items-center gap-1"
+                  >
+                    <span style={{ fontSize: '1.2rem' }}>👤</span>
+                    <span>{user?.username}</span>
+                  </Link>
+                  <button
+                    onClick={logout}
+                    className="btn btn-sm btn-outline-mint px-2 py-0 align-self-start"
+                    style={{ fontSize: '0.8rem' }}
+                  >
+                    خروج
+                  </button>
+                </>
+              ) : (
+                <TopRowLink label="ورود" href="/auth" variant="secondary" />
+              )}
               <hr className="my-2 border-charcoal" />
             </div>
 

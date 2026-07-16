@@ -1,20 +1,37 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import FormField from "./FormField";
+import { useAuth } from "../../hooks/useAuth";
+import { Link, useNavigate } from "react-router-dom";
+
 
 const LoginForm = ({ onToggle }) => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [error, setError] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // handle login
+    setError("");
+    setLoading(true);
+    try {
+      await login(email, password);
+      navigate("/"); // or go to the page they came from
+    } catch (err) {
+      setError("ایمیل یا رمز عبور اشتباه است.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="w-100">
       <h3 className="fw-extrabold mb-1 text-charcoal">ورود</h3>
       <p className="text-muted small mb-4">خوشحالیم دوباره می‌بینیمت 🌿</p>
+
+      {error && <div className="alert alert-danger py-2 small">{error}</div>}    
 
       <FormField
         id="loginEmail"
@@ -39,8 +56,8 @@ const LoginForm = ({ onToggle }) => {
       />
 
       <div className="pt-1 mb-3">
-        <button type="submit" className="btn btn-saffron w-100 fw-bold btn-auth">
-          ورود
+        <button type="submit" className="btn btn-saffron w-100 fw-bold btn-auth" disabled={loading}>
+          {loading ? "در حال ورود..." : "ورود"}
         </button>
       </div>
 

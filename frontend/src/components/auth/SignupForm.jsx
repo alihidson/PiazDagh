@@ -1,15 +1,37 @@
 import React from "react";
 import FormField from "./FormField";
+import { useAuth } from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+
 
 const SignupForm = ({ onToggle }) => {
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
+  const [error, setError] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+  const { login, signup  } = useAuth();       // or create a `signup` in context, but we can reuse login after signup
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // handle signup
+    setError("");
+
+    if (password !== confirmPassword) {
+      setError("رمز عبور و تکرار آن مطابقت ندارند.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await signup(name, email, password);
+      navigate("/");            // redirect after successful signup
+    } catch (err) {
+      setError("خطا در ثبت نام. لطفاً دوباره تلاش کنید.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -60,9 +82,11 @@ const SignupForm = ({ onToggle }) => {
         labelIcon="lock"
       />
 
+      {error && <div className="alert alert-danger py-2 small">{error}</div>}
+
       <div className="pt-1 mb-3">
-        <button type="submit" className="btn btn-saffron w-100 fw-bold btn-auth">
-          ثبت نام
+        <button type="submit" className="btn btn-saffron w-100 fw-bold btn-auth" disabled={loading}>
+          {loading ? "در حال ثبت نام..." : "ثبت نام"}
         </button>
       </div>
 
