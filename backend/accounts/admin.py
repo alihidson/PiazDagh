@@ -6,6 +6,23 @@ from .models import User
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
+    list_display = (
+        "id",
+        "username",
+        "email",
+        "first_name",
+        "last_name",
+        "is_staff",
+        "is_active",
+    )
+
+    search_fields = (
+        "username",
+        "email",
+        "first_name",
+        "last_name",
+    )
+
     fieldsets = UserAdmin.fieldsets + (
         (
             "Profile",
@@ -16,36 +33,4 @@ class CustomUserAdmin(UserAdmin):
                 )
             },
         ),
-    )
-
-    add_fieldsets = UserAdmin.add_fieldsets + (
-        (
-            "Profile",
-            {
-                "fields": (
-                    "email",
-                    "first_name",
-                    "last_name",
-                    "avatar",
-                    "bio",
-                )
-            },
-        ),
-    )
-
-    list_display = (
-        "id",
-        "username",
-        "email",
-        "first_name",
-        "last_name",
-        "is_active",
-        "is_staff",
-    )
-
-    search_fields = (
-        "username",
-        "email",
-        "first_name",
-        "last_name",
     )
