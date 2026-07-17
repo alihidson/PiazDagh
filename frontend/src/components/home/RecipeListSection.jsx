@@ -1,6 +1,5 @@
-import { Link } from 'react-router-dom';
-import RecipeCard from '../cards/RecipeCard';
-import "./Home.css";
+import { Link } from "react-router-dom";
+import RecipeCard from "../cards/RecipeCard";
 
 const RecipeListSection = ({ title, recipes, linkTo, maxDisplay = 4 }) => {
   const displayedRecipes = recipes.slice(0, maxDisplay);
@@ -14,20 +13,21 @@ const RecipeListSection = ({ title, recipes, linkTo, maxDisplay = 4 }) => {
         </Link>
       </div>
 
-      <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4 mt-1">
+      <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
         {displayedRecipes.map((recipe, index) => (
           <div
-            className={`col ${maxDisplay === 4 && index === 3 ? 'd-none d-sm-block' : ''}`}
+            className={`col ${maxDisplay === 4 && index === 3 ? "d-none d-sm-block" : ""}`}
             key={recipe.id}
           >
             <RecipeCard
+              id={recipe.id}
+              slug={recipe.slug}
               image={recipe.image}
               title={recipe.title}
               description={recipe.description}
               rating={recipe.rating}
               time={recipe.time}
               difficulty={recipe.difficulty}
-              linkTo={recipe.linkTo}
             />
           </div>
         ))}

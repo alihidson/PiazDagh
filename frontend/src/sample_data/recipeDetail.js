@@ -4,8 +4,8 @@
 // or just a single recipe. For now, a map of id → recipe.
 
 const recipeDetails = {
-  12: {
-    id: 12,
+  1: {
+    id: 1,
     title: "خورشت قورمه سبزی",
     slug: "ghorme-sabzi",
     description:

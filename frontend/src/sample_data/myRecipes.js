@@ -1,0 +1,32 @@
+export const myRecipes = [
+  {
+    id: 301,
+    title: "قورمه سبزی (پیش‌نویس)",
+    description: "دستور اصلاح‌شده قورمه سبزی",
+    image: "/src/assets/images/hero-image-2.jpg",
+    rating: 4.5,
+    time: 180,
+    difficulty: "متوسط",
+    linkTo: "/recipe/301/draft",
+  },
+  {
+    id: 302,
+    title: "املت اسفناج",
+    description: "یک صبحانه سریع و خوشمزه",
+    image: "/src/assets/images/breakfast.jpg",
+    rating: 4.2,
+    time: 15,
+    difficulty: "آسان",
+    linkTo: "/recipe/302/spinach-omelette",
+  },
+  {
+    id: 303,
+    title: "کیک هویج",
+    description: "کیک خوشمزه با طعم دارچین",
+    image: "/src/assets/images/dessert.jpg",
+    rating: 4.7,
+    time: 90,
+    difficulty: "متوسط",
+    linkTo: "/recipe/303/carrot-cake",
+  },
+];

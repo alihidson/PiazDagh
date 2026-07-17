@@ -1,6 +1,4 @@
-// components/home/FeaturedSection.jsx
-import RecipeCard from '../cards/RecipeCard';
-import "./Home.css";
+import RecipeCard from "../cards/RecipeCard";
 
 const FeaturedSection = ({ recipes }) => {
   return (
@@ -11,17 +9,18 @@ const FeaturedSection = ({ recipes }) => {
         </h2>
       </div>
 
-      <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4 bg-saffron-subtle p-3 rounded-4 mt-1">
+      <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
         {recipes.map((recipe) => (
           <div className="col" key={recipe.id}>
             <RecipeCard
+              id={recipe.id}
+              slug={recipe.slug}
               image={recipe.image}
               title={recipe.title}
               description={recipe.description}
               rating={recipe.rating}
               time={recipe.time}
               difficulty={recipe.difficulty}
-              linkTo={recipe.linkTo}
             />
           </div>
         ))}

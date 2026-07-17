@@ -6,8 +6,8 @@ const authService = {
       // Simulate a logged‑in user for testing – return null to simulate logged out
       return {
         id: 1,
-        username: 'مهمان',
-        email: 'guest@piazdagh.ir',
+        username: "مهمان",
+        email: "guest@piazdagh.ir",
       };
       // return null; // uncomment to test logged‑out state
     }
@@ -20,7 +20,7 @@ const authService = {
       // Fake successful login
       return {
         id: 1,
-        username: 'مهمان',
+        username: "مهمان",
         email,
       };
     }
@@ -45,6 +45,36 @@ const authService = {
       };
     }
     // const response = await axios.post('/api/signup', { name, email, password });
+    // return response.data;
+  },
+
+  async updateProfile(profileData) {
+    if (USE_MOCK) {
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      // Just return the updated data (the UI will update via context)
+      return {
+        ...profileData,
+        // keep the same id
+        id: 1,
+      };
+    }
+    // const response = await axios.put('/api/profile', profileData);
+    // return response.data;
+  },
+
+  // Inside the authService object
+
+  async uploadAvatar(file) {
+    if (USE_MOCK) {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      // Return a fake URL – the UI will use this as the new avatar
+      return {
+        avatar: "https://randomuser.me/api/portraits/lego/1.jpg", // or any placeholder
+      };
+    }
+    // const formData = new FormData();
+    // formData.append('avatar', file);
+    // const response = await axios.post('/api/profile/avatar', formData);
     // return response.data;
   },
 };
