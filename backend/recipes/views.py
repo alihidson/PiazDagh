@@ -366,3 +366,79 @@ class ReviewDetailView(
             "recipe",
         )
     )
+
+
+
+
+
+class RecipeReviewListCreateView(
+    generics.ListCreateAPIView
+):
+    serializer_class = ReviewSerializer
+    permission_classes = [
+        IsAuthenticatedOrReadOnly,
+    ]
+
+    def get_recipe(self):
+        return get_object_or_404(
+            Recipe.objects.select_related(
+                "author",
+                "category",
+            ),
+            pk=self.kwargs["recipe_pk"],
+            status=Recipe.Status.PUBLISHED,
+        )
+
+    def get_queryset(self):
+        recipe = self.get_recipe()
+
+        return (
+            Review.objects
+            .filter(recipe=recipe)
+            .select_related(
+                "user",
+                "recipe",
+            )
+        )
+
+    def perform_create(self, serializer):
+        recipe = self.get_recipe()
+
+        review_exists = Review.objects.filter(
+            user=self.request.user,
+            recipe=recipe,
+        ).exists()
+
+        if review_exists:
+            raise ValidationError(
+                {
+                    "detail": (
+                        "You have already reviewed this recipe."
+                    )
+                }
+            )
+
+        serializer.save(
+            user=self.request.user,
+            recipe=recipe,
+        )
+
+
+class ReviewDetailView(
+    generics.RetrieveUpdateDestroyAPIView
+):
+    serializer_class = ReviewSerializer
+    permission_classes = [
+        IsReviewAuthorOrReadOnly,
+    ]
+
+    queryset = (
+        Review.objects
+        .filter(
+            recipe__status=Recipe.Status.PUBLISHED,
+        )
+        .select_related(
+            "user",
+            "recipe",
+        )
+    )
