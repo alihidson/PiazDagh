@@ -22,6 +22,11 @@ urlpatterns = [
         "api/auth/",
         include("accounts.urls"),
     ),
+    
+    path(
+        "api/admin-panel/",
+        include("admin_api.urls"),
+    ),
 
     path(
         "api/",
