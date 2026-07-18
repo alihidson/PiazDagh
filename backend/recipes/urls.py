@@ -7,6 +7,8 @@ from .views import (
     RecipeDetailView,
     RecipeFavoriteView,
     RecipeListCreateView,
+    RecipeReviewListCreateView,
+    ReviewDetailView,
 )
 
 
@@ -37,6 +39,7 @@ urlpatterns = [
         RecipeDetailView.as_view(),
         name="recipe-detail",
     ),
+    
     path(
         "favorites/",
         FavoriteListView.as_view(),
@@ -47,5 +50,17 @@ urlpatterns = [
         "recipes/<int:pk>/favorite/",
         RecipeFavoriteView.as_view(),
         name="recipe-favorite",
+    ),
+
+    path(
+        "recipes/<int:recipe_pk>/reviews/",
+        RecipeReviewListCreateView.as_view(),
+        name="recipe-review-list-create",
+    ),
+
+    path(
+        "reviews/<int:pk>/",
+        ReviewDetailView.as_view(),
+        name="review-detail",
     ),
 ]

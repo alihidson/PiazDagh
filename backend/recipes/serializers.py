@@ -1,3 +1,4 @@
+from django.db import models
 from django.db import transaction
 from rest_framework import serializers
 
@@ -7,9 +8,8 @@ from recipes.models import (
     Ingredient,
     Recipe,
     RecipeIngredient,
+    Review,
 )
-
-
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -59,6 +59,9 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
 class RecipeSerializer(serializers.ModelSerializer):
     author = serializers.SerializerMethodField()
 
+    average_rating = serializers.SerializerMethodField()
+    reviews_count = serializers.SerializerMethodField()
+
     category = CategorySerializer(
         read_only=True,
     )
@@ -98,6 +101,8 @@ class RecipeSerializer(serializers.ModelSerializer):
             "servings",
             "status",
             "ingredients",
+            "average_rating",
+            "reviews_count",
             "created_at",
             "updated_at",
         )
@@ -106,6 +111,8 @@ class RecipeSerializer(serializers.ModelSerializer):
             "id",
             "author",
             "total_time",
+            "average_rating",
+            "reviews_count",
             "created_at",
             "updated_at",
         )
@@ -117,6 +124,19 @@ class RecipeSerializer(serializers.ModelSerializer):
             "first_name": obj.author.first_name,
             "last_name": obj.author.last_name,
         }
+
+    def get_average_rating(self, obj):
+        average = obj.reviews.aggregate(
+            average=models.Avg("rating"),
+        )["average"]
+
+        if average is None:
+            return None
+
+        return round(average, 1)
+
+    def get_reviews_count(self, obj):
+        return obj.reviews.count()
 
     def validate_ingredients(self, ingredients):
         ingredient_ids = [
@@ -138,7 +158,9 @@ class RecipeSerializer(serializers.ModelSerializer):
             [],
         )
 
-        recipe = Recipe.objects.create(**validated_data)
+        recipe = Recipe.objects.create(
+            **validated_data,
+        )
 
         RecipeIngredient.objects.bulk_create(
             [
@@ -160,7 +182,11 @@ class RecipeSerializer(serializers.ModelSerializer):
         )
 
         for field, value in validated_data.items():
-            setattr(instance, field, value)
+            setattr(
+                instance,
+                field,
+                value,
+            )
 
         instance.save()
 
@@ -180,7 +206,6 @@ class RecipeSerializer(serializers.ModelSerializer):
         return instance
 
 
-
 class FavoriteSerializer(serializers.ModelSerializer):
     recipe = RecipeSerializer(
         read_only=True,
@@ -195,3 +220,27 @@ class FavoriteSerializer(serializers.ModelSerializer):
         )
 
         read_only_fields = fields
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField(
+        read_only=True,
+    )
+
+    class Meta:
+        model = Review
+        fields = (
+            "id",
+            "user",
+            "rating",
+            "comment",
+            "created_at",
+            "updated_at",
+        )
+
+        read_only_fields = (
+            "id",
+            "user",
+            "created_at",
+            "updated_at",
+        )

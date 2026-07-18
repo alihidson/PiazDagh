@@ -1,7 +1,11 @@
 from django.db.models import Q
 
+#from django.db import IntegrityError
+
 from rest_framework.filters import OrderingFilter, SearchFilter
 from django.shortcuts import get_object_or_404
+
+from rest_framework import generics
 
 from rest_framework.generics import (
     ListAPIView,
@@ -20,13 +24,18 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 
-from .models import Category, Ingredient, Recipe, Favorite
+from .models import Category, Ingredient, Recipe, Favorite, Review
 from .permissions import IsAuthorOrReadOnly
-from recipes.serializers import FavoriteSerializer
+
+from recipes.permissions import IsReviewAuthorOrReadOnly
+from rest_framework.exceptions import ValidationError
+
 from .serializers import (
     CategorySerializer,
     IngredientSerializer,
     RecipeSerializer,
+    FavoriteSerializer,
+    ReviewSerializer,
 )
 
 
@@ -281,3 +290,79 @@ class RecipeFavoriteView(APIView):
         return Response(
             status=status.HTTP_204_NO_CONTENT,
         )
+
+
+
+
+
+class RecipeReviewListCreateView(
+    generics.ListCreateAPIView
+):
+    serializer_class = ReviewSerializer
+    permission_classes = [
+        IsAuthenticatedOrReadOnly,
+    ]
+
+    def get_recipe(self):
+        return get_object_or_404(
+            Recipe.objects.select_related(
+                "author",
+                "category",
+            ),
+            pk=self.kwargs["recipe_pk"],
+            status=Recipe.Status.PUBLISHED,
+        )
+
+    def get_queryset(self):
+        recipe = self.get_recipe()
+
+        return (
+            Review.objects
+            .filter(recipe=recipe)
+            .select_related(
+                "user",
+                "recipe",
+            )
+        )
+
+    def perform_create(self, serializer):
+        recipe = self.get_recipe()
+
+        if Review.objects.filter(
+            user=self.request.user,
+            recipe=recipe,
+        ).exists():
+            
+
+            raise ValidationError(
+                {
+                    "detail": (
+                        "You have already reviewed this recipe."
+                    )
+                }
+            )
+
+        serializer.save(
+            user=self.request.user,
+            recipe=recipe,
+        )
+
+
+class ReviewDetailView(
+    generics.RetrieveUpdateDestroyAPIView
+):
+    serializer_class = ReviewSerializer
+    permission_classes = [
+        IsReviewAuthorOrReadOnly,
+    ]
+
+    queryset = (
+        Review.objects
+        .filter(
+            recipe__status=Recipe.Status.PUBLISHED,
+        )
+        .select_related(
+            "user",
+            "recipe",
+        )
+    )

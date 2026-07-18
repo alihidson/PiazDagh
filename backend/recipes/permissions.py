@@ -12,3 +12,21 @@ class IsAuthorOrReadOnly(BasePermission):
             request.user.is_authenticated
             and obj.author_id == request.user.id
         )
+
+
+
+class IsReviewAuthorOrReadOnly(BasePermission):
+    def has_object_permission(
+        self,
+        request,
+        view,
+        obj,
+    ):
+        if request.method in SAFE_METHODS:
+            return True
+
+        return (
+            request.user.is_authenticated
+            and obj.user == request.user
+        )
+

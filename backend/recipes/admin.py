@@ -6,6 +6,7 @@ from .models import (
     Ingredient,
     Recipe,
     RecipeIngredient,
+    Review,
 )
 
 
@@ -116,6 +117,35 @@ class FavoriteAdmin(admin.ModelAdmin):
         "user__username",
         "user__email",
         "recipe__title",
+    )
+
+    list_select_related = (
+        "user",
+        "recipe",
+    )
+
+
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "user",
+        "recipe",
+        "rating",
+        "created_at",
+    )
+
+    list_filter = (
+        "rating",
+        "created_at",
+    )
+
+    search_fields = (
+        "user__username",
+        "user__email",
+        "recipe__title",
+        "comment",
     )
 
     list_select_related = (
