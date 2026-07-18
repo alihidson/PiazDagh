@@ -103,9 +103,16 @@ class ReviewAPITests(APITestCase):
         )
 
         self.assertEqual(
-            len(response.data),
+            len(response.data["results"]),
             1,
         )
+
+        self.assertEqual(
+            response.data["results"][0]["rating"],
+            5,
+        )
+
+        
 
     def test_anonymous_user_cannot_create_review(self):
         response = self.client.post(

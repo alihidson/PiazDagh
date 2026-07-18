@@ -112,8 +112,8 @@ class RecipeAPITests(APITestCase):
 
     def get_recipe_ids(self, response):
         return [
-            recipe["id"]
-            for recipe in response.data
+        recipe["id"]
+        for recipe in response.data["results"]
         ]
 
     def test_anonymous_user_can_view_published_recipes(self):
@@ -451,15 +451,16 @@ class RecipeAPITests(APITestCase):
         )
 
         self.assertGreater(
-            len(response.data),
+            len(response.data["results"]),
             0,
         )
 
-        for recipe in response.data:
+        for recipe in response.data["results"]:
             self.assertEqual(
                 recipe["category"]["id"],
                 self.fast_food_category.id,
             )
+
 
     def test_filter_recipes_by_status(self):
         self.authenticate()
@@ -477,15 +478,16 @@ class RecipeAPITests(APITestCase):
         )
 
         self.assertGreater(
-            len(response.data),
+            len(response.data["results"]),
             0,
         )
 
-        for recipe in response.data:
+        for recipe in response.data["results"]:
             self.assertEqual(
                 recipe["status"],
                 Recipe.Status.DRAFT,
             )
+
 
     def test_search_recipe_by_title(self):
         response = self.client.get(
@@ -534,7 +536,7 @@ class RecipeAPITests(APITestCase):
 
         preparation_times = [
             recipe["preparation_time"]
-            for recipe in response.data
+            for recipe in response.data["results"]
         ]
 
         self.assertEqual(
