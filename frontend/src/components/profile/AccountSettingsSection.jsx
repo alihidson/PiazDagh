@@ -9,8 +9,7 @@ const AccountSettingsSection = () => {
   const [account, setAccount] = useState({
     firstName: user?.firstName || "",
     lastName: user?.lastName || "",
-    username: user?.username || "",
-    email: user?.email || "",
+    bio: user?.bio || "",
   });
 
   // Password state
@@ -101,24 +100,13 @@ const AccountSettingsSection = () => {
               style={{ borderColor: "rgba(68,69,68,0.15)" }}
             />
           </div>
-          <div className="col-md-6">
-            <label className="form-label text-charcoal">نام کاربری</label>
-            <input
-              type="text"
-              name="username"
+          <div className="col-12">
+            <label className="form-label text-charcoal">درباره من</label>
+            <textarea
+              name="bio"
               className="form-control bg-white text-charcoal"
-              value={account.username}
-              onChange={handleInfoChange}
-              style={{ borderColor: "rgba(68,69,68,0.15)" }}
-            />
-          </div>
-          <div className="col-md-6">
-            <label className="form-label text-charcoal">ایمیل</label>
-            <input
-              type="email"
-              name="email"
-              className="form-control bg-white text-charcoal"
-              value={account.email}
+              rows="3"
+              value={account.bio}
               onChange={handleInfoChange}
               style={{ borderColor: "rgba(68,69,68,0.15)" }}
             />

@@ -49,6 +49,12 @@ const AccountInfoSection = ({ onGoToSettings }) => {
           </label>
           <p className="text-charcoal fw-medium">{joinDate}</p>
         </div>
+        <div className="col-12">
+          <label className="form-label text-charcoal opacity-75 small">
+            درباره من
+          </label>
+          <p className="text-charcoal fw-medium">{user?.bio || "—"}</p>
+        </div>
       </div>
     </div>
   );

@@ -3,13 +3,14 @@ const USE_MOCK = true;
 const authService = {
   async getCurrentUser() {
     if (USE_MOCK) {
-      // Simulate a logged‑in user for testing – return null to simulate logged out
       return {
         id: 1,
         username: "مهمان",
         email: "guest@piazdagh.ir",
+        firstName: "علی",
+        lastName: "اکبری",
+        bio: "عاشق آشپزی ایرانی",
       };
-      // return null; // uncomment to test logged‑out state
     }
     // const response = await axios.get('/api/me');
     // return response.data;
@@ -51,14 +52,16 @@ const authService = {
   async updateProfile(profileData) {
     if (USE_MOCK) {
       await new Promise((resolve) => setTimeout(resolve, 300));
-      // Just return the updated data (the UI will update via context)
       return {
         ...profileData,
-        // keep the same id
         id: 1,
       };
     }
-    // const response = await axios.put('/api/profile', profileData);
+    // const response = await axios.patch('/api/auth/me/', {
+    //   first_name: profileData.firstName,
+    //   last_name: profileData.lastName,
+    //   bio: profileData.bio,
+    // });
     // return response.data;
   },
 };

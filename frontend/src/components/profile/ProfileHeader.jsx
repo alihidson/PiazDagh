@@ -37,6 +37,10 @@ const ProfileHeader = () => {
       {/* Email */}
       <p className="text-charcoal opacity-75 mb-2">{user?.email || ""}</p>
 
+      {user?.bio && (
+        <p className="text-charcoal small opacity-75 mb-2">{user.bio}</p>
+      )}
+
       {/* Join date */}
       <p className="text-charcoal small opacity-50 mb-3">
         عضویت از: {joinDate}
