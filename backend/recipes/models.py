@@ -7,6 +7,7 @@ class TimeStampedModel(models.Model):
     created_at = models.DateTimeField(
         auto_now_add=True,
     )
+
     updated_at = models.DateTimeField(
         auto_now=True,
     )
@@ -20,6 +21,7 @@ class Category(TimeStampedModel):
         max_length=100,
         unique=True,
     )
+
     description = models.TextField(
         blank=True,
     )
@@ -109,8 +111,12 @@ class Recipe(TimeStampedModel):
     class Meta:
         ordering = ("-created_at",)
         indexes = [
-            models.Index(fields=["status", "-created_at"]),
-            models.Index(fields=["category", "-created_at"]),
+            models.Index(
+                fields=["status", "-created_at"],
+            ),
+            models.Index(
+                fields=["category", "-created_at"],
+            ),
         ]
 
     def __str__(self):
@@ -176,3 +182,29 @@ class RecipeIngredient(models.Model):
 
     def __str__(self):
         return f"{self.recipe.title} - {self.ingredient.name}"
+
+
+class Favorite(TimeStampedModel):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="favorite_recipes",
+    )
+
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        related_name="favorited_by",
+    )
+
+    class Meta:
+        ordering = ("-created_at",)
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "recipe"],
+                name="unique_user_recipe_favorite",
+            ),
+        ]
+
+    def __str__(self):
+        return f"{self.user.username} - {self.recipe.title}"

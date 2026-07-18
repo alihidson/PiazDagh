@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from .models import (
     Category,
+    Favorite,
     Ingredient,
     Recipe,
     RecipeIngredient,
@@ -97,4 +98,27 @@ class RecipeIngredientAdmin(admin.ModelAdmin):
     autocomplete_fields = (
         "recipe",
         "ingredient",
+    )
+
+
+
+
+@admin.register(Favorite)
+class FavoriteAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "user",
+        "recipe",
+        "created_at",
+    )
+
+    search_fields = (
+        "user__username",
+        "user__email",
+        "recipe__title",
+    )
+
+    list_select_related = (
+        "user",
+        "recipe",
     )

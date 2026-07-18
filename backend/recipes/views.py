@@ -1,14 +1,28 @@
 from django.db.models import Q
+
 from rest_framework.filters import OrderingFilter, SearchFilter
+from django.shortcuts import get_object_or_404
+
 from rest_framework.generics import (
     ListAPIView,
     ListCreateAPIView,
     RetrieveUpdateDestroyAPIView,
 )
-from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 
-from .models import Category, Ingredient, Recipe
+from rest_framework.permissions import (
+    AllowAny,
+    IsAuthenticated,
+)
+
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+
+from .models import Category, Ingredient, Recipe, Favorite
 from .permissions import IsAuthorOrReadOnly
+from recipes.serializers import FavoriteSerializer
 from .serializers import (
     CategorySerializer,
     IngredientSerializer,
@@ -154,4 +168,116 @@ class RecipeDetailView(RetrieveUpdateDestroyAPIView):
 
         return queryset.filter(
             status=Recipe.Status.PUBLISHED
+        )
+
+
+class FavoriteListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        favorites = (
+            Favorite.objects
+            .filter(user=request.user)
+            .select_related(
+                "recipe",
+                "recipe__author",
+                "recipe__category",
+            )
+            .prefetch_related(
+                "recipe__recipe_ingredients__ingredient",
+            )
+        )
+
+        serializer = FavoriteSerializer(
+            favorites,
+            many=True,
+            context={
+                "request": request,
+            },
+        )
+
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK,
+        )
+
+
+class RecipeFavoriteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get_recipe(self, request, pk):
+        queryset = (
+            Recipe.objects
+            .filter(
+                Q(status=Recipe.Status.PUBLISHED)
+                | Q(author=request.user)
+            )
+            .select_related(
+                "author",
+                "category",
+            )
+            .prefetch_related(
+                "recipe_ingredients__ingredient",
+            )
+        )
+
+        return get_object_or_404(
+            queryset,
+            pk=pk,
+        )
+
+    def post(self, request, pk):
+        recipe = self.get_recipe(
+            request,
+            pk,
+        )
+
+        favorite, created = Favorite.objects.get_or_create(
+            user=request.user,
+            recipe=recipe,
+        )
+
+        serializer = FavoriteSerializer(
+            favorite,
+            context={
+                "request": request,
+            },
+        )
+
+        if created:
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED,
+            )
+
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK,
+        )
+
+    def delete(self, request, pk):
+        recipe = self.get_recipe(
+            request,
+            pk,
+        )
+
+        favorite = Favorite.objects.filter(
+            user=request.user,
+            recipe=recipe,
+        ).first()
+
+        if favorite is None:
+            return Response(
+                {
+                    "detail": (
+                        "This recipe is not in your favorites."
+                    )
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        favorite.delete()
+
+        return Response(
+            status=status.HTTP_204_NO_CONTENT,
         )

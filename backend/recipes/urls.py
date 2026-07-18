@@ -2,8 +2,10 @@ from django.urls import path
 
 from .views import (
     CategoryListView,
+    FavoriteListView,
     IngredientListView,
     RecipeDetailView,
+    RecipeFavoriteView,
     RecipeListCreateView,
 )
 
@@ -34,5 +36,16 @@ urlpatterns = [
         "recipes/<int:pk>/",
         RecipeDetailView.as_view(),
         name="recipe-detail",
+    ),
+    path(
+        "favorites/",
+        FavoriteListView.as_view(),
+        name="favorite-list",
+    ),
+
+    path(
+        "recipes/<int:pk>/favorite/",
+        RecipeFavoriteView.as_view(),
+        name="recipe-favorite",
     ),
 ]

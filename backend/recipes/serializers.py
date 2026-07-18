@@ -1,12 +1,15 @@
 from django.db import transaction
 from rest_framework import serializers
 
-from .models import (
+from recipes.models import (
     Category,
+    Favorite,
     Ingredient,
     Recipe,
     RecipeIngredient,
 )
+
+
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -175,3 +178,20 @@ class RecipeSerializer(serializers.ModelSerializer):
             )
 
         return instance
+
+
+
+class FavoriteSerializer(serializers.ModelSerializer):
+    recipe = RecipeSerializer(
+        read_only=True,
+    )
+
+    class Meta:
+        model = Favorite
+        fields = (
+            "id",
+            "recipe",
+            "created_at",
+        )
+
+        read_only_fields = fields
