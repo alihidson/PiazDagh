@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 const CommentForm = ({ onSubmit }) => {
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!text.trim()) return;
     onSubmit(text);
-    setText('');
+    setText("");
   };
 
   return (
@@ -16,7 +16,12 @@ const CommentForm = ({ onSubmit }) => {
         {/* Placeholder avatar for current user */}
         <div
           className="rounded-circle bg-mint d-flex align-items-center justify-content-center flex-shrink-0"
-          style={{ width: '40px', height: '40px', color: '#e6ebe3', fontWeight: 'bold' }}
+          style={{
+            width: "40px",
+            height: "40px",
+            color: "#e6ebe3",
+            fontWeight: "bold",
+          }}
         >
           👤
         </div>
@@ -27,7 +32,7 @@ const CommentForm = ({ onSubmit }) => {
             placeholder="نظر خود را بنویسید..."
             value={text}
             onChange={(e) => setText(e.target.value)}
-            style={{ borderColor: 'rgba(68,69,68,0.15)', resize: 'vertical' }}
+            style={{ borderColor: "rgba(68,69,68,0.15)", resize: "vertical" }}
           />
           <div className="text-start">
             <button type="submit" className="btn btn-saffron">

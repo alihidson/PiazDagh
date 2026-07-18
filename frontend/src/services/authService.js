@@ -61,22 +61,6 @@ const authService = {
     // const response = await axios.put('/api/profile', profileData);
     // return response.data;
   },
-
-  // Inside the authService object
-
-  async uploadAvatar(file) {
-    if (USE_MOCK) {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      // Return a fake URL – the UI will use this as the new avatar
-      return {
-        avatar: "https://randomuser.me/api/portraits/lego/1.jpg", // or any placeholder
-      };
-    }
-    // const formData = new FormData();
-    // formData.append('avatar', file);
-    // const response = await axios.post('/api/profile/avatar', formData);
-    // return response.data;
-  },
 };
 
 export default authService;

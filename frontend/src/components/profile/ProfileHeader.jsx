@@ -1,11 +1,7 @@
-import { useRef, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
-import authService from "../../services/authService";
 
 const ProfileHeader = () => {
-  const { user, updateUser } = useAuth();
-  const fileInputRef = useRef(null);
-  const [uploading, setUploading] = useState(false);
+  const { user } = useAuth();
 
   // Mock data – later these will come from a user profile service
   const joinDate = "تیر ۱۴۰۵";
@@ -14,85 +10,21 @@ const ProfileHeader = () => {
     recipes: 8,
   };
 
-  const handleAvatarClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleFileChange = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setUploading(true);
-    try {
-      const result = await authService.uploadAvatar(file);
-      updateUser({ avatar: result.avatar });
-    } catch {
-      alert("خطا در آپلود تصویر");
-    } finally {
-      setUploading(false);
-    }
-  };
-
   return (
     <div className="text-center mb-5">
-      {/* Hidden file input */}
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChange={handleFileChange}
-        accept="image/*"
-        style={{ display: "none" }}
-      />
-
-      {/* Avatar */}
-      <div className="d-inline-block position-relative">
-        {uploading ? (
-          <div
-            className="rounded-circle bg-mint d-flex align-items-center justify-content-center mx-auto"
-            style={{ width: "100px", height: "100px" }}
-          >
-            <div
-              className="spinner-border text-white spinner-border-sm"
-              role="status"
-            >
-              <span className="visually-hidden">در حال آپلود...</span>
-            </div>
-          </div>
-        ) : user?.avatar ? (
-          <img
-            src={user.avatar}
-            alt="تصویر پروفایل"
-            className="rounded-circle"
-            style={{ width: "100px", height: "100px", objectFit: "cover" }}
-          />
-        ) : (
-          <div
-            className="rounded-circle bg-mint d-flex align-items-center justify-content-center mx-auto"
-            style={{
-              width: "100px",
-              height: "100px",
-              fontSize: "2.5rem",
-              color: "#e6ebe3",
-            }}
-          >
-            {(user?.username || "ک")[0].toUpperCase()}
-          </div>
-        )}
-        <button
-          onClick={handleAvatarClick}
-          className="btn btn-sm btn-saffron rounded-circle position-absolute"
+      {/* Avatar – always shows initial */}
+      <div className="d-inline-block">
+        <div
+          className="rounded-circle bg-mint d-flex align-items-center justify-content-center mx-auto"
           style={{
-            bottom: "0",
-            right: "0",
-            width: "32px",
-            height: "32px",
-            padding: "0",
+            width: "100px",
+            height: "100px",
+            fontSize: "2.5rem",
+            color: "#e6ebe3",
           }}
-          title="تغییر تصویر"
-          disabled={uploading}
         >
-          📷
-        </button>
+          {(user?.username || "ک")[0].toUpperCase()}
+        </div>
       </div>
 
       {/* Name */}
