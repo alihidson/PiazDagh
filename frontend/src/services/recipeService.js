@@ -1,201 +1,103 @@
-// services/recipeService.js
-import { featuredRecipes } from "../sample_data/featuredRecipes";
-import { trendingRecipes } from "../sample_data/trendingRecipes";
-import { newRecipes } from "../sample_data/newRecipes";
-import recipeDetails from "../sample_data/recipeDetail";
-import { myRecipes } from "../sample_data/myRecipes";
-import { favoriteRecipes } from "../sample_data/FavoriteRecipes";
-import recipeLists from "../sample_data/recipeLists";
-// import axios from 'axios';
+import apiClient from "./apiClient";
+import fallbackImage from "../assets/images/hero-image-2.jpg";
 
-const USE_MOCK = true;
+const unwrapList = (data) => Array.isArray(data) ? data : (data?.results || []);
+const slugify = (value = "recipe") => encodeURIComponent(value.trim().replace(/\s+/g, "-"));
+const difficultyFromTime = (time) => time <= 30 ? "آسان" : time <= 90 ? "متوسط" : "سخت";
+const unitMap = { g: "گرم", kg: "کیلوگرم", ml: "میلی‌لیتر", l: "لیتر", tsp: "قاشق چای‌خوری", tbsp: "قاشق غذاخوری", cup: "پیمانه", piece: "عدد", to_taste: "به مقدار لازم" };
+
+const normalizeRecipe = (recipe) => {
+  const time = recipe.total_time ?? ((recipe.preparation_time || 0) + (recipe.cooking_time || 0));
+  const instructions = (recipe.instructions || "").split(/\n+/).map((text) => text.trim()).filter(Boolean);
+  return {
+    ...recipe,
+    slug: recipe.slug || slugify(recipe.title),
+    image: recipe.image || fallbackImage,
+    rating: Number(recipe.average_rating ?? 0),
+    time,
+    cookTime: time,
+    difficulty: recipe.difficulty || difficultyFromTime(time),
+    views: recipe.views || 0,
+    longDescription: [recipe.description || ""],
+    ingredients: (recipe.ingredients || []).map((item) => ({
+      name: item.ingredient?.name || item.name || "",
+      amount: item.amount == null ? "" : Number(item.amount),
+      unit: unitMap[item.unit] || item.unit || "",
+      note: item.note || "",
+    })),
+    steps: instructions.map((text, index) => ({ order: index + 1, text })),
+    tips: [],
+  };
+};
+
+const paramsForFilters = (type, filters, sort) => {
+  const params = {};
+  if (type?.startsWith("category-")) params.category = type.replace("category-", "");
+  if (type === "new") params.ordering = "-created_at";
+  if (type === "trending") params.ordering = "-average_rating";
+  if (sort === "newest") params.ordering = "-created_at";
+  if (sort === "oldest") params.ordering = "created_at";
+  if (sort === "highest") params.ordering = "-average_rating";
+  if (filters.search) params.search = filters.search;
+  return params;
+};
 
 const recipeService = {
   async getFeatured() {
-    if (USE_MOCK) {
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      return featuredRecipes;
-    }
-    // const response = await axios.get('/api/recipes/featured/');
-    // return response.data;
+    const { data } = await apiClient.get("/recipes/", { params: { ordering: "-average_rating", page_size: 3 } });
+    return unwrapList(data).slice(0, 3).map(normalizeRecipe);
   },
-
   async getTrending() {
-    if (USE_MOCK) {
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      return trendingRecipes;
-    }
-    // const response = await axios.get('/api/recipes/trending/');
-    // return response.data;
+    const { data } = await apiClient.get("/recipes/", { params: { ordering: "-average_rating", page_size: 6 } });
+    return unwrapList(data).slice(0, 6).map(normalizeRecipe);
   },
-
   async getNew() {
-    if (USE_MOCK) {
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      return newRecipes;
-    }
-    // const response = await axios.get('/api/recipes/new/');
-    // return response.data;
+    const { data } = await apiClient.get("/recipes/", { params: { ordering: "-created_at", page_size: 6 } });
+    return unwrapList(data).slice(0, 6).map(normalizeRecipe);
   },
-
   async getRecipe(id) {
-    if (USE_MOCK) {
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      // The id coming from the URL is a string, so convert if necessary
-      const recipe = recipeDetails[Number(id)];
-      if (!recipe) throw new Error("Recipe not found");
-      return recipe;
-    }
-    // const response = await axios.get(`/api/recipes/${id}/`);
-    // return response.data;
+    const { data } = await apiClient.get(`/recipes/${id}/`);
+    return normalizeRecipe(data);
   },
-
   async getComments(recipeId) {
-    if (USE_MOCK) {
-      await new Promise((resolve) => setTimeout(resolve, 200));
-      const recipe = recipeDetails[Number(recipeId)];
-      if (!recipe) throw new Error("Recipe not found");
-      return recipe.comments || [];
-    }
-    // const response = await axios.get(`/api/recipes/${recipeId}/comments/`);
-    // return response.data;
+    const { data } = await apiClient.get(`/recipes/${recipeId}/reviews/`);
+    return unwrapList(data).map((review) => ({
+      id: review.id,
+      user: { name: review.user, avatar: null },
+      text: review.comment,
+      rating: review.rating,
+      time: new Date(review.created_at).toLocaleDateString("fa-IR"),
+    }));
   },
-
-  async addComment(recipeId, text) {
-    if (USE_MOCK) {
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      // Return a mock new comment object — the UI will add it locally anyway
-      return {
-        id: Date.now(),
-        user: { name: "کاربر مهمان", avatar: null },
-        text,
-        time: "همین الان",
-        likes: 0,
-        liked: false,
-        replies: [],
-      };
-    }
-    // const response = await axios.post(`/api/recipes/${recipeId}/comments/`, { text });
-    // return response.data;
+  async addComment(recipeId, text, rating = 5) {
+    const { data } = await apiClient.post(`/recipes/${recipeId}/reviews/`, { comment: text, rating });
+    return { id: data.id, user: { name: data.user, avatar: null }, text: data.comment, rating: data.rating, time: "همین الان" };
   },
-
-  async addReply(recipeId, commentId, text) {
-    if (USE_MOCK) {
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      return {
-        id: Date.now(),
-        user: { name: "کاربر مهمان", avatar: null },
-        text,
-        time: "همین الان",
-        likes: 0,
-        liked: false,
-      };
-    }
-    // const response = await axios.post(`/api/recipes/${recipeId}/comments/${commentId}/replies/`, { text });
-    // return response.data;
-  },
-
-  async likeComment(recipeId, commentId) {
-    if (USE_MOCK) {
-      await new Promise((resolve) => setTimeout(resolve, 200));
-      return { success: true };
-    }
-    // const response = await axios.post(`/api/recipes/${recipeId}/comments/${commentId}/like/`);
-    // return response.data;
-  },
-
   async getMyRecipes() {
-    if (USE_MOCK) {
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      return myRecipes;
-    }
-    // const response = await axios.get('/api/my-recipes');
-    // return response.data;
+    const { data } = await apiClient.get("/recipes/", { params: { mine: true, page_size: 100 } });
+    return unwrapList(data).map(normalizeRecipe);
   },
-
-  // Inside recipeService object:
-
   async getFavoriteRecipes() {
-    if (USE_MOCK) {
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      return favoriteRecipes;
-    }
-    // const response = await axios.get('/api/favorites');
-    // return response.data;
+    const { data } = await apiClient.get("/favorites/");
+    return unwrapList(data).map((item) => normalizeRecipe(item.recipe));
   },
-
-  // Inside the recipeService object
-
-  async deleteRecipe(recipeId) {
-    if (USE_MOCK) {
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      // Return success – the UI will remove the card from state
-      return { success: true };
-    }
-    // const response = await axios.delete(`/api/recipes/${recipeId}/`);
-    // return response.data;
-  },
-
-  async removeFavorite(recipeId) {
-    if (USE_MOCK) {
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      return { success: true };
-    }
-    // const response = await axios.delete(`/api/favorites/${recipeId}/`);
-    // return response.data;
-  },
-
+  async deleteRecipe(recipeId) { await apiClient.delete(`/recipes/${recipeId}/`); return { success: true }; },
+  async addFavorite(recipeId) { const { data } = await apiClient.post(`/recipes/${recipeId}/favorite/`); return data; },
+  async removeFavorite(recipeId) { await apiClient.delete(`/recipes/${recipeId}/favorite/`); return { success: true }; },
   async getFilteredRecipes(type, filters = {}, sort = "") {
-    if (USE_MOCK) {
-      await new Promise((resolve) => setTimeout(resolve, 300));
-
-      // Get base list based on type
-      let recipes = [];
-
-      if (type === "trending") {
-        recipes = [...recipeLists.trending];
-      } else if (type === "new") {
-        recipes = [...recipeLists.new];
-      } else if (type?.startsWith("category-")) {
-        recipes = [...recipeLists.category];
-      }
-
-      // --- Apply Filters (unchanged) ---
-      if (filters.cookTime?.length > 0) {
-        recipes = recipes.filter((r) => {
-          if (filters.cookTime.includes("under30")) return r.time < 30;
-          if (filters.cookTime.includes("30to60"))
-            return r.time >= 30 && r.time <= 60;
-          if (filters.cookTime.includes("over60")) return r.time > 60;
-          return false;
-        });
-      }
-
-      if (filters.difficulty?.length > 0) {
-        const diffMap = { easy: "آسان", medium: "متوسط", hard: "سخت" };
-        const selectedDiffs = filters.difficulty.map((d) => diffMap[d]);
-        recipes = recipes.filter((r) => selectedDiffs.includes(r.difficulty));
-      }
-
-      if (filters.score?.length > 0) {
-        const minScore = Math.min(...filters.score.map(Number));
-        recipes = recipes.filter((r) => r.rating >= minScore);
-      }
-
-      // --- Apply Sort ---
-      if (sort === "newest") {
-        recipes.sort((a, b) => b.id - a.id);
-      } else if (sort === "oldest") {
-        recipes.sort((a, b) => a.id - b.id);
-      } else if (sort === "highest") {
-        recipes.sort((a, b) => b.rating - a.rating);
-      }
-
-      return recipes;
-    }
-
-    // const response = await axios.get(`/api/recipes/${type}/`, { params: { ...filters, sort } });
-    // return response.data;
+    const { data } = await apiClient.get("/recipes/", { params: { ...paramsForFilters(type, filters, sort), page_size: 100 } });
+    let recipes = unwrapList(data).map(normalizeRecipe);
+    if (filters.cookTime?.length) recipes = recipes.filter((r) => filters.cookTime.some((v) => v === "under30" ? r.time < 30 : v === "30to60" ? r.time >= 30 && r.time <= 60 : r.time > 60));
+    if (filters.difficulty?.length) { const map = { easy: "آسان", medium: "متوسط", hard: "سخت" }; recipes = recipes.filter((r) => filters.difficulty.map((x) => map[x]).includes(r.difficulty)); }
+    if (filters.score?.length) recipes = recipes.filter((r) => r.rating >= Math.min(...filters.score.map(Number)));
+    return recipes;
+  },
+  async getCategories() { const { data } = await apiClient.get("/categories/"); return data; },
+  async getIngredients() { const { data } = await apiClient.get("/ingredients/"); return data; },
+  async saveRecipe(payload, id = null) {
+    const request = id ? apiClient.patch(`/recipes/${id}/`, payload) : apiClient.post("/recipes/", payload);
+    const { data } = await request;
+    return normalizeRecipe(data);
   },
 };
 

@@ -37,6 +37,7 @@ const Navbar = () => {
               {/* Auth-aware section */}
               {isAuthenticated ? (
                 <>
+                  <Link to="/new-recipe" className="btn btn-sm btn-saffron px-3 py-1">ثبت دستور</Link>
                   <Link
                     to="/profile"
                     className="text-charcoal text-decoration-none d-flex align-items-center gap-1"

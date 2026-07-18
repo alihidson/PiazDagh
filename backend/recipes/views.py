@@ -1,4 +1,4 @@
-from django.db.models import Q
+from django.db.models import Avg, Count, Q
 
 #from django.db import IntegrityError
 
@@ -82,9 +82,20 @@ class RecipeListCreateView(ListCreateAPIView):
         "cooking_time",
         "servings",
         "title",
+        "average_rating",
     ]
 
     ordering = ["-created_at"]
+
+    def filter_queryset(self, queryset):
+        ordering = self.request.query_params.get("ordering")
+        if ordering in {"average_rating", "-average_rating"}:
+            direction = "-" if ordering.startswith("-") else ""
+            queryset = queryset.order_by(f"{direction}average_rating_value", "-created_at")
+            original = self.request.query_params.copy()
+            original.pop("ordering", None)
+            self.request._request.GET = original
+        return super().filter_queryset(queryset)
 
     def get_queryset(self):
         queryset = (
@@ -96,6 +107,7 @@ class RecipeListCreateView(ListCreateAPIView):
             .prefetch_related(
                 "recipe_ingredients__ingredient",
             )
+            .annotate(average_rating_value=Avg("reviews__rating"), reviews_count_value=Count("reviews", distinct=True))
             .distinct()
         )
 

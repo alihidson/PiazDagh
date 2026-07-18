@@ -1,80 +1,147 @@
-const USE_MOCK = true;
+import apiClient from "./apiClient";
+
+const ACCESS_TOKEN_KEY = "access_token";
+const REFRESH_TOKEN_KEY = "refresh_token";
+
+const normalizeUser = (user) => {
+  if (!user) {
+    return null;
+  }
+
+  return {
+    id: user.id,
+    username: user.username,
+    email: user.email,
+    firstName: user.first_name || "",
+    lastName: user.last_name || "",
+    bio: user.bio || "",
+    dateJoined: user.date_joined || null,
+  };
+};
+
+const saveTokens = (accessToken, refreshToken) => {
+  if (accessToken) {
+    localStorage.setItem(
+      ACCESS_TOKEN_KEY,
+      accessToken,
+    );
+  }
+
+  if (refreshToken) {
+    localStorage.setItem(
+      REFRESH_TOKEN_KEY,
+      refreshToken,
+    );
+  }
+};
+
+const clearTokens = () => {
+  localStorage.removeItem(ACCESS_TOKEN_KEY);
+  localStorage.removeItem(REFRESH_TOKEN_KEY);
+};
 
 const authService = {
   async getCurrentUser() {
-    if (USE_MOCK) {
-      return {
-        id: 1,
-        username: "مهمان",
-        email: "guest@piazdagh.ir",
-        firstName: "علی",
-        lastName: "اکبری",
-        bio: "عاشق آشپزی ایرانی",
-      };
+    const accessToken =
+      localStorage.getItem(ACCESS_TOKEN_KEY);
+
+    const refreshToken =
+      localStorage.getItem(REFRESH_TOKEN_KEY);
+
+    if (!accessToken && !refreshToken) {
+      return null;
     }
-    // const response = await axios.get('/api/me');
-    // return response.data;
+
+    const response =
+      await apiClient.get("/auth/me/");
+
+    return normalizeUser(response.data);
   },
 
-  async login(email, password) {
-    if (USE_MOCK) {
-      // Fake successful login
-      return {
-        id: 1,
-        username: "مهمان",
+  async login(username, password) {
+    const loginResponse =
+      await apiClient.post("/auth/login/", {
+        username,
+        password,
+      });
+
+    saveTokens(
+      loginResponse.data.access,
+      loginResponse.data.refresh,
+    );
+
+    const userResponse =
+      await apiClient.get("/auth/me/");
+
+    return normalizeUser(userResponse.data);
+  },
+
+  async signup(
+    username,
+    email,
+    firstName,
+    lastName,
+    password,
+    confirmPassword,
+  ) {
+    const response =
+      await apiClient.post("/auth/register/", {
+        username,
         email,
-      };
-    }
-    // const response = await axios.post('/api/login', { email, password });
-    // return response.data;
+        first_name: firstName,
+        last_name: lastName,
+        password,
+        password_confirm: confirmPassword,
+      });
+
+    saveTokens(
+      response.data.tokens?.access,
+      response.data.tokens?.refresh,
+    );
+
+    return normalizeUser(response.data.user);
   },
 
   async logout() {
-    if (USE_MOCK) {
-      return;
+    const refreshToken =
+      localStorage.getItem(REFRESH_TOKEN_KEY);
+
+    try {
+      if (refreshToken) {
+        await apiClient.post("/auth/logout/", {
+          refresh: refreshToken,
+        });
+      }
+    } finally {
+      clearTokens();
     }
-    // await axios.post('/api/logout');
   },
 
-  async signup(name, email, password) {
-    if (USE_MOCK) {
-      // Fake successful registration
-      return {
-        id: 1,
-        username: name,
-        email,
-      };
-    }
-    // const response = await axios.post('/api/signup', { name, email, password });
-    // return response.data;
-  },
+  async changePassword(
+    currentPassword,
+    newPassword,
+  ) {
+    const response =
+      await apiClient.post(
+        "/auth/change-password/",
+        {
+          old_password: currentPassword,
+          new_password: newPassword,
+        },
+      );
 
-  async changePassword(currentPassword, newPassword) {
-    if (USE_MOCK) {
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      return { success: true };
-    }
-    // const response = await axios.post('/api/auth/change-password/', {
-    //   old_password: currentPassword,
-    //   new_password: newPassword,
-    // });
-    // return response.data;
+    return response.data;
   },
 
   async updateProfile(profileData) {
-    if (USE_MOCK) {
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      return {
-        ...profileData,
-        id: 1,
-      };
-    }
-    // const response = await axios.patch('/api/auth/me/', {
-    //   first_name: profileData.firstName,
-    //   last_name: profileData.lastName,
-    //   bio: profileData.bio,
-    // });
-    // return response.data;
+    const response =
+      await apiClient.patch("/auth/me/", {
+        first_name: profileData.firstName,
+        last_name: profileData.lastName,
+        bio: profileData.bio,
+      });
+
+    return normalizeUser(response.data);
   },
 };
 

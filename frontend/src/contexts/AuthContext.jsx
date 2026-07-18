@@ -29,15 +29,35 @@ export const AuthProvider = ({ children }) => {
 
   const isAuthenticated = user !== null;
 
-  const login = useCallback(async (email, password) => {
-    const loggedInUser = await authService.login(email, password);
+  const login = useCallback(async (username, password) => {
+    const loggedInUser = await authService.login(username, password);
     setUser(loggedInUser);
   }, []);
 
-  const signup = useCallback(async (name, email, password) => {
-    const newUser = await authService.signup(name, email, password);
-    setUser(newUser);
-  }, []);
+  const signup = useCallback(
+    async (
+      username,
+      email,
+      firstName,
+      lastName,
+      password,
+      confirmPassword,
+    ) => {
+      const newUser = await authService.signup(
+        username,
+        email,
+        firstName,
+        lastName,
+        password,
+        confirmPassword,
+      );
+
+      setUser(newUser);
+    },
+    [],
+  );
+
+
 
   const logout = useCallback(async () => {
     await authService.logout();

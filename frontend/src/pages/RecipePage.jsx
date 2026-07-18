@@ -14,6 +14,7 @@ const RecipePage = () => {
   const [recipe, setRecipe] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [favoriteMessage, setFavoriteMessage] = useState('');
 
   useEffect(() => {
     async function loadRecipe() {
@@ -69,9 +70,10 @@ const RecipePage = () => {
 
       {/* Favorite Button */}
       <div className="container px-4 pb-4 text-center">
-        <button className="btn btn-outline-plum px-4">
+        <button className="btn btn-outline-plum px-4" onClick={async () => { try { await recipeService.addFavorite(id); setFavoriteMessage("به علاقه‌مندی‌ها اضافه شد."); } catch (e) { setFavoriteMessage(e.response?.status === 401 ? "برای ذخیره دستور وارد شوید." : "امکان ذخیره دستور نبود."); } }}>
           ❤️ ذخیره دستور
         </button>
+        {favoriteMessage && <p className="mt-2 text-charcoal">{favoriteMessage}</p>}
       </div>
 
       <AboutDish paragraphs={recipe.longDescription} />
