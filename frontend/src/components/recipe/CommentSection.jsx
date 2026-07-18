@@ -1,7 +1,7 @@
-import CommentForm from './CommentForm';
-import CommentItem from './CommentItem';
-import LoginPrompt from './LoginPrompt';
-import { useAuth } from '../../hooks/useAuth';
+import CommentForm from "./CommentForm";
+import CommentItem from "./CommentItem";
+import LoginPrompt from "./LoginPrompt";
+import { useAuth } from "../../hooks/useAuth";
 
 const CommentSection = ({ comments, onAddComment }) => {
   const { isAuthenticated } = useAuth();

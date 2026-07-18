@@ -79,33 +79,17 @@ const recipeDetails = {
       "می‌توانید برای جا افتادن خورش از کمی آرد استفاده کنید.",
     ],
     comments: [
-      // no nested comments for now
       {
         id: 101,
-        user: { name: 'سارا محمدی', avatar: null },   // avatar can be a URL or null
-        text: 'عالی بود! من برای اولین بار درست کردم و همه تعریف کردن.',
-        time: '۲ ساعت پیش',
-        likes: 5,
-        liked: false,
-        replies: [
-          {
-            id: 102,
-            user: { name: 'پیاز داغ', avatar: null, isAdmin: true },
-            text: 'خوشحالیم که راضی بودید!',
-            time: '۱ ساعت پیش',
-            likes: 2,
-            liked: false,
-          },
-        ],
+        user: { name: "سارا محمدی", avatar: null },
+        text: "عالی بود! من برای اولین بار درست کردم و همه تعریف کردن.",
+        time: "۲ ساعت پیش",
       },
       {
         id: 103,
-        user: { name: 'رضا کریمی', avatar: null },
-        text: 'به نظر من اگه سبزی تازه‌تر باشه رنگش بهتر میشه.',
-        time: 'دیروز',
-        likes: 3,
-        liked: false,
-        replies: [],
+        user: { name: "رضا کریمی", avatar: null },
+        text: "به نظر من اگه سبزی تازه‌تر باشه رنگش بهتر میشه.",
+        time: "دیروز",
       },
     ],
   },
