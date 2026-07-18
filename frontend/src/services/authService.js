@@ -49,6 +49,18 @@ const authService = {
     // return response.data;
   },
 
+  async changePassword(currentPassword, newPassword) {
+    if (USE_MOCK) {
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      return { success: true };
+    }
+    // const response = await axios.post('/api/auth/change-password/', {
+    //   old_password: currentPassword,
+    //   new_password: newPassword,
+    // });
+    // return response.data;
+  },
+
   async updateProfile(profileData) {
     if (USE_MOCK) {
       await new Promise((resolve) => setTimeout(resolve, 300));

@@ -124,19 +124,6 @@ const recipeService = {
     // return response.data;
   },
 
-  async changePassword(currentPassword, newPassword) {
-    if (USE_MOCK) {
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      // Just return success – UI can show a message
-      return { success: true };
-    }
-    // const response = await axios.post('/api/change-password', {
-    //   current_password: currentPassword,
-    //   new_password: newPassword,
-    // });
-    // return response.data;
-  },
-
   // Inside the recipeService object
 
   async deleteRecipe(recipeId) {
@@ -157,7 +144,6 @@ const recipeService = {
     // const response = await axios.delete(`/api/favorites/${recipeId}/`);
     // return response.data;
   },
-
 
   async getFilteredRecipes(type, filters = {}, sort = "") {
     if (USE_MOCK) {
