@@ -3,15 +3,16 @@ import FormField from "./FormField";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
-
 const SignupForm = ({ onToggle }) => {
-  const [name, setName] = React.useState("");
+  const [firstName, setFirstName] = React.useState("");
+  const [lastName, setLastName] = React.useState("");
+  const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
   const [error, setError] = React.useState("");
   const [loading, setLoading] = React.useState(false);
-  const { login, signup  } = useAuth();       // or create a `signup` in context, but we can reuse login after signup
+  const { signup } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -25,8 +26,15 @@ const SignupForm = ({ onToggle }) => {
 
     setLoading(true);
     try {
-      await signup(name, email, password);
-      navigate("/");            // redirect after successful signup
+      await signup(
+        username,
+        email,
+        firstName,
+        lastName,
+        password,
+        confirmPassword,
+      );
+      navigate("/");
     } catch (err) {
       setError("خطا در ثبت نام. لطفاً دوباره تلاش کنید.");
     } finally {
@@ -39,12 +47,36 @@ const SignupForm = ({ onToggle }) => {
       <h3 className="fw-extrabold mb-1 text-charcoal">ثبت نام</h3>
       <p className="text-muted small mb-4">به خانواده پیازداغ بپیوندید ✨</p>
 
+      {/* First & Last name in one row */}
+      <div className="row g-2 mb-3">
+        <div className="col-6">
+          <FormField
+            id="signupFirstName"
+            label="نام"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            placeholder="نام"
+            floating
+          />
+        </div>
+        <div className="col-6">
+          <FormField
+            id="signupLastName"
+            label="نام خانوادگی"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            placeholder="نام خانوادگی"
+            floating
+          />
+        </div>
+      </div>
+
       <FormField
-        id="signupName"
-        label="نام کامل"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="نام و نام خانوادگی"
+        id="signupUsername"
+        label="نام کاربری"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        placeholder="نام کاربری"
         floating
         labelIcon="person"
       />
@@ -85,7 +117,11 @@ const SignupForm = ({ onToggle }) => {
       {error && <div className="alert alert-danger py-2 small">{error}</div>}
 
       <div className="pt-1 mb-3">
-        <button type="submit" className="btn btn-saffron w-100 fw-bold btn-auth" disabled={loading}>
+        <button
+          type="submit"
+          className="btn btn-saffron w-100 fw-bold btn-auth"
+          disabled={loading}
+        >
           {loading ? "در حال ثبت نام..." : "ثبت نام"}
         </button>
       </div>

@@ -3,9 +3,8 @@ import FormField from "./FormField";
 import { useAuth } from "../../hooks/useAuth";
 import { Link, useNavigate } from "react-router-dom";
 
-
 const LoginForm = ({ onToggle }) => {
-  const [email, setEmail] = React.useState("");
+  const [username, setUsername] = React.useState(""); // renamed from email
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState("");
   const [loading, setLoading] = React.useState(false);
@@ -17,10 +16,10 @@ const LoginForm = ({ onToggle }) => {
     setError("");
     setLoading(true);
     try {
-      await login(email, password);
-      navigate("/"); // or go to the page they came from
+      await login(username, password); // now sends username + password
+      navigate("/");
     } catch (err) {
-      setError("ایمیل یا رمز عبور اشتباه است.");
+      setError("نام کاربری یا رمز عبور اشتباه است.");
     } finally {
       setLoading(false);
     }
@@ -31,17 +30,16 @@ const LoginForm = ({ onToggle }) => {
       <h3 className="fw-extrabold mb-1 text-charcoal">ورود</h3>
       <p className="text-muted small mb-4">خوشحالیم دوباره می‌بینیمت 🌿</p>
 
-      {error && <div className="alert alert-danger py-2 small">{error}</div>}    
+      {error && <div className="alert alert-danger py-2 small">{error}</div>}
 
       <FormField
-        id="loginEmail"
-        label="ایمیل"
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="you@example.com"
+        id="loginUsername"
+        label="نام کاربری"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        placeholder="نام کاربری"
         floating
-        labelIcon="envelope"
+        labelIcon="person"
       />
 
       <FormField
@@ -56,13 +54,20 @@ const LoginForm = ({ onToggle }) => {
       />
 
       <div className="pt-1 mb-3">
-        <button type="submit" className="btn btn-saffron w-100 fw-bold btn-auth" disabled={loading}>
+        <button
+          type="submit"
+          className="btn btn-saffron w-100 fw-bold btn-auth"
+          disabled={loading}
+        >
           {loading ? "در حال ورود..." : "ورود"}
         </button>
       </div>
 
       <p className="small mb-3">
-        <Link to="#" className="text-muted text-decoration-none link-muted-hover">
+        <Link
+          to="#"
+          className="text-muted text-decoration-none link-muted-hover"
+        >
           رمز عبور را فراموش کرده‌اید؟
         </Link>
       </p>
