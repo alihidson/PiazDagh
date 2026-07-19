@@ -32,17 +32,11 @@ export const AuthProvider = ({ children }) => {
   const login = useCallback(async (username, password) => {
     const loggedInUser = await authService.login(username, password);
     setUser(loggedInUser);
+    return loggedInUser;
   }, []);
 
   const signup = useCallback(
-    async (
-      username,
-      email,
-      firstName,
-      lastName,
-      password,
-      confirmPassword,
-    ) => {
+    async (username, email, firstName, lastName, password, confirmPassword) => {
       const newUser = await authService.signup(
         username,
         email,
@@ -53,11 +47,10 @@ export const AuthProvider = ({ children }) => {
       );
 
       setUser(newUser);
+      return newUser;
     },
     [],
   );
-
-
 
   const logout = useCallback(async () => {
     await authService.logout();

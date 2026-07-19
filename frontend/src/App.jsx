@@ -7,6 +7,7 @@ import RecipePage from "./pages/RecipePage";
 import ProfilePage from "./pages/ProfilePage";
 import RecipeListPage from "./pages/RecipeListPage";
 import RecipeFormPage from "./pages/RecipeFormPage";
+import AdminPage from "./pages/AdminPage";
 
 function App() {
   return (
@@ -16,6 +17,8 @@ function App() {
           <Routes>
             {/* Routes WITHOUT Navbar/Footer */}
             <Route path="/auth" element={<LoginSignupPage />} />
+
+            <Route path="/admin" element={<AdminPage />} />
 
             <Route element={<MainLayout />}>
               <Route path="/" element={<HomePage />} />

@@ -19,6 +19,19 @@ const SignupForm = ({ onToggle }) => {
     e.preventDefault();
     setError("");
 
+    // 1. Required fields
+    if (!username.trim() || !email.trim() || !password || !confirmPassword) {
+      setError("لطفاً همه فیلدهای ضروری را پر کنید.");
+      return;
+    }
+
+    // 2. Password length
+    if (password.length < 8) {
+      setError("رمز عبور باید حداقل ۸ کاراکتر باشد.");
+      return;
+    }
+
+    // 3. Password confirmation
     if (password !== confirmPassword) {
       setError("رمز عبور و تکرار آن مطابقت ندارند.");
       return;
@@ -26,7 +39,7 @@ const SignupForm = ({ onToggle }) => {
 
     setLoading(true);
     try {
-      await signup(
+      const user = await signup(
         username,
         email,
         firstName,
@@ -34,7 +47,11 @@ const SignupForm = ({ onToggle }) => {
         password,
         confirmPassword,
       );
-      navigate("/");
+      if (user.isStaff) {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
     } catch (err) {
       setError("خطا در ثبت نام. لطفاً دوباره تلاش کنید.");
     } finally {

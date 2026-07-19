@@ -59,6 +59,7 @@ class UserSerializer(serializers.ModelSerializer):
             "avatar",
             "bio",
             "date_joined",
+            "is_staff",
         )
 
         read_only_fields = (
@@ -66,6 +67,7 @@ class UserSerializer(serializers.ModelSerializer):
             "username",
             "email",
             "date_joined",
+            "is_staff",
         )
 
 

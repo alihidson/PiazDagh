@@ -16,8 +16,12 @@ const LoginForm = ({ onToggle }) => {
     setError("");
     setLoading(true);
     try {
-      await login(username, password); // now sends username + password
-      navigate("/");
+      const user = await login(username, password);
+      if (user.isStaff) {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
     } catch (err) {
       setError("نام کاربری یا رمز عبور اشتباه است.");
     } finally {

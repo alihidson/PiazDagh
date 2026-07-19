@@ -16,6 +16,7 @@ const normalizeUser = (user) => {
     lastName: user.last_name || "",
     bio: user.bio || "",
     dateJoined: user.date_joined || null,
+    isStaff: user.is_staff || false,
   };
 };
 
