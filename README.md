@@ -212,8 +212,6 @@ Docker Compose automatically creates the required network and volumes.
 
 # 📸 Screenshots
 
-> Add screenshots of the application here.
-
 Example:
 
 
